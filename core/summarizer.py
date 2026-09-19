@@ -189,41 +189,27 @@ def generate_title(summary: str) -> str:
 #     return summary
 
 
-def process_transcript(transcript: str, output_path: str = None) -> dict:
+def process_transcript(transcript: str) -> dict:
     """
-    Full pipeline — returns all generated content as a dict.
+    Full summarization pipeline.
 
     Returns:
         {
-            title, short_summary, detailed_summary,
-            key_points, topics
+            "title": str,
+            "short_summary": str,
+            "detailed_summary": str,
+            "key_points": str,
+            "topics": str
         }
     """
     detailed_summary = summarize(transcript)
 
     result = {
-        "title":            generate_title(detailed_summary),
-        "short_summary":    generate_short_summary(detailed_summary),
+        "title": generate_title(detailed_summary),
+        "short_summary": generate_short_summary(detailed_summary),
         "detailed_summary": detailed_summary,
-        "key_points":       generate_key_points(detailed_summary),
-        "topics":           generate_topics(detailed_summary),
+        "key_points": generate_key_points(detailed_summary),
+        "topics": generate_topics(detailed_summary),
     }
-
-    if output_path:
-        content = f"""Title: {result['title']}
-
-Short Summary:
-{result['short_summary']}
-
-Topics:
-{result['topics']}
-
-Key Points:
-{result['key_points']}
-
-Detailed Summary:
-{result['detailed_summary']}
-"""
-        save_summary(content, output_path)
 
     return result

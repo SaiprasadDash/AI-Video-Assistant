@@ -10,7 +10,7 @@ from core.rag_engine import build_rag_chain, ask_question
 load_dotenv()
 
 
-def run_ai_video_assistant(source: str, question: str | None = None):
+def run_ai_video_assistant(source: str):
     """Run the full AI video assistant pipeline for a YouTube URL or local media file."""
     print("\n=== AI Video Assistant ===")
     print(f"Source: {source}")
@@ -30,6 +30,9 @@ def run_ai_video_assistant(source: str, question: str | None = None):
     decisions = extract_decisions(transcript)
     open_questions = extract_questions(transcript)
 
+    print("\n[5/5] Building RAG chain for chat...")
+    rag_chain = build_rag_chain(transcript)
+
     output = {
         "title": result["title"],
         "short_summary": result["short_summary"],
@@ -39,12 +42,8 @@ def run_ai_video_assistant(source: str, question: str | None = None):
         "actionable_items": actionable,
         "decisions": decisions,
         "questions": open_questions,
+        "rag_chain": rag_chain,
     }
-
-    if question:
-        print("\n[5/5] Answering question from transcript context...")
-        rag_chain = build_rag_chain(transcript)
-        output["rag_answer"] = ask_question(rag_chain, question)
 
     print("\n=== Pipeline Complete ===")
     return output
@@ -58,13 +57,9 @@ if __name__ == "__main__":
         default="https://www.youtube.com/watch?v=_Q-e_nczWqM&t=223s",
         help="YouTube URL or local file path",
     )
-    parser.add_argument(
-        "--question",
-        help="Optional question to answer using the transcript as context",
-    )
     args = parser.parse_args()
 
-    data = run_ai_video_assistant(args.source, args.question)
+    data = run_ai_video_assistant(args.source)
 
     print("\nTITLE")
     print(data["title"])
@@ -81,6 +76,15 @@ if __name__ == "__main__":
     print("\nQUESTIONS")
     print(data["questions"])
 
-    if args.question:
-        print("\nRAG ANSWER")
-        print(data["rag_answer"])
+    # Phase 2 — Chat with your meeting via RAG
+    print("\n💬 Chat with your meeting (type 'exit' to quit)\n")
+    rag_chain = data["rag_chain"]
+    while True:
+        question = input("You: ").strip()
+        if question.lower() in ["exit", "quit", "q"]:
+            print("👋 Goodbye!")
+            break
+        if not question:
+            continue
+        answer = ask_question(rag_chain, question)
+        print(f"\n🤖 Assistant: {answer}\n")
