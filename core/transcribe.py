@@ -52,10 +52,10 @@ def transcribe_chunks(chunks: list[str], model_name: str = WHISPER_MODEL, verbos
     return transcripts
 
 
-def save_transcript(transcripts: list[str], output_path: str) -> str:
-    """Join chunk transcripts and save to a .txt file."""
-    full_text = "\n\n".join(transcripts)
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(full_text)
-    print(f"Transcript saved to: {output_path}")
-    return full_text
+# def save_transcript(transcripts: list[str], output_path: str) -> str:
+#     """Join chunk transcripts and save to a .txt file."""
+#     full_text = "\n\n".join(transcripts)
+#     with open(output_path, "w", encoding="utf-8") as f:
+#         f.write(full_text)
+#     print(f"Transcript saved to: {output_path}")
+#     return full_text

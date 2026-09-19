@@ -1,4 +1,6 @@
-.env
-.venv/
+downloads/
+vector_db/
 __pycache__/
-*.pyc   
+*.pyc
+.venv/
+.env

@@ -181,12 +181,12 @@ def generate_title(summary: str) -> str:
     return title_chain.invoke({"summary": summary}).strip()
 
 
-def save_summary(summary: str, output_path: str) -> str:
-    """Save summary to a .txt file."""
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(summary)
-    print(f"Summary saved to: {output_path}")
-    return summary
+# def save_summary(summary: str, output_path: str) -> str:
+#     """Save summary to a .txt file."""
+#     with open(output_path, "w", encoding="utf-8") as f:
+#         f.write(summary)
+#     print(f"Summary saved to: {output_path}")
+#     return summary
 
 
 def process_transcript(transcript: str, output_path: str = None) -> dict:
